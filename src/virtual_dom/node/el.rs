@@ -88,17 +88,21 @@ impl<Ms> fmt::Display for El<Ms> {
             output += &format!(" {}", attributes);
         }
 
-        output += ">";
-
-        for child in &self.children {
-            output += &child.to_string();
-        }
-
         // https://developer.mozilla.org/en-US/docs/Glossary/empty_element
         let empty_elements = [
             "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param",
             "source", "track", "wbr",
         ];
+        if empty_elements.contains(&tag.to_lowercase().as_str()) {
+            output += "/>";
+        } else {
+            output += ">";
+        }
+
+        for child in &self.children {
+            output += &child.to_string();
+        }
+
         if !empty_elements.contains(&tag.to_lowercase().as_str()) {
             output += &format!("</{}>", self.tag);
         }
